@@ -158,7 +158,10 @@
         setIsLoggingIn(true);
 
         setTimeout(() => {
-          if (email === 'info@ieatd.com' && password === '123') {
+          if (
+            (email === 'info@ieatd.com' && password === '123') ||
+            (email === 'mohamed.cms737@gmail.com' && password === 'menna123456789##@0')
+          ) {
             setIsAuthenticated(true);
           } else {
             setLoginError('بيانات الدخول غير صحيحة، يرجى المحاولة مرة أخرى.');
