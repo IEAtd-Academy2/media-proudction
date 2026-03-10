@@ -92,12 +92,35 @@
 
   <!-- كود React (تم تعديله للعمل كـ Module) -->
   <script type="text/babel" data-type="module">
-    import React, { useState } from 'https://esm.sh/react@18';
+    import React, { useState, useEffect, useRef } from 'https://esm.sh/react@18';
     import { createRoot } from 'https://esm.sh/react-dom@18/client';
-    import { 
-      Video, PenTool, Lock, User, Play, FileText, 
-      LogOut, Eye, EyeOff, ChevronLeft, Aperture, Sparkles 
-    } from 'https://esm.sh/lucide-react@latest';
+    // استيراد أيقونات lucide الأساسية بدلاً من مكونات React لتجنب أخطاء التوافق
+    import * as icons from 'https://esm.sh/lucide@latest';
+
+    // مكون مساعد لرسم الأيقونات بأمان
+    const Icon = ({ name, className }) => {
+      const iconRef = useRef(null);
+
+      useEffect(() => {
+        if (iconRef.current && icons.icons[name]) {
+          // تفريغ المحتوى السابق لتجنب تكرار الأيقونة عند التحديث
+          iconRef.current.innerHTML = '';
+          const iconNode = icons.icons[name].toSvg();
+          
+          // تحويل سلسلة SVG النصية إلى عنصر DOM
+          const template = document.createElement('template');
+          template.innerHTML = iconNode.trim();
+          const svgElement = template.content.firstChild;
+          
+          if (className) {
+            svgElement.setAttribute('class', className);
+          }
+          iconRef.current.appendChild(svgElement);
+        }
+      }, [name, className]);
+
+      return <span ref={iconRef} className={`inline-flex items-center justify-center ${className || ''}`} />;
+    };
 
     function App() {
       // حالة تسجيل الدخول
@@ -164,7 +187,7 @@
               <div className="glass-panel w-full max-w-md p-10 rounded-3xl z-10 fade-in-up shadow-2xl shadow-purple-900/20">
                 <div className="flex flex-col items-center mb-8">
                   <div className="w-20 h-20 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-2xl flex items-center justify-center mb-6 floating shadow-lg shadow-purple-500/30">
-                    <Aperture className="w-10 h-10 text-white" />
+                    <Icon name="aperture" className="w-10 h-10 text-white" />
                   </div>
                   <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-2">ميديا برودكشن</h1>
                   <p className="text-gray-400 text-sm">البوابة الخاصة بفريق الإبداع</p>
@@ -175,7 +198,7 @@
                     <label className="block text-sm font-medium text-gray-300 mb-2">البريد الإلكتروني</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <User className="h-5 w-5 text-gray-500" />
+                        <Icon name="user" className="h-5 w-5 text-gray-500" />
                       </div>
                       <input
                         type="email"
@@ -193,7 +216,7 @@
                     <label className="block text-sm font-medium text-gray-300 mb-2">كلمة المرور</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <Lock className="h-5 w-5 text-gray-500" />
+                        <Icon name="lock" className="h-5 w-5 text-gray-500" />
                       </div>
                       <input
                         type={showPassword ? 'text' : 'password'}
@@ -209,7 +232,7 @@
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 hover:text-gray-300 transition-colors"
                       >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showPassword ? <Icon name="eyeOff" className="h-5 w-5" /> : <Icon name="eye" className="h-5 w-5" />}
                       </button>
                     </div>
                   </div>
@@ -247,7 +270,7 @@
                   <div className="flex justify-between items-center h-20">
                     <div className="flex items-center gap-3 fade-in-up">
                       <div className="w-10 h-10 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
-                        <Aperture className="w-6 h-6 text-white" />
+                        <Icon name="aperture" className="w-6 h-6 text-white" />
                       </div>
                       <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
                         ميديا برودكشن
@@ -259,7 +282,7 @@
                       className="fade-in-up flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-all duration-300"
                     >
                       <span className="text-sm font-semibold hidden sm:block">تسجيل خروج</span>
-                      <LogOut className="w-4 h-4" />
+                      <Icon name="logOut" className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -268,7 +291,7 @@
               <main className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
                 <div className="text-center mb-20 relative z-10">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel mb-6 fade-in-up text-purple-400 text-sm font-semibold">
-                    <Sparkles className="w-4 h-4" />
+                    <Icon name="sparkles" className="w-4 h-4" />
                     <span>المنصة الإبداعية المتكاملة</span>
                   </div>
                   <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight fade-in-up delay-100">
@@ -289,7 +312,7 @@
                           : 'text-gray-400 hover:text-white hover:bg-white/5'
                       }`}
                     >
-                      <Video className="w-5 h-5" />
+                      <Icon name="video" className="w-5 h-5" />
                       المحتوى المرئي
                     </button>
                     <button
@@ -300,7 +323,7 @@
                           : 'text-gray-400 hover:text-white hover:bg-white/5'
                       }`}
                     >
-                      <PenTool className="w-5 h-5" />
+                      <Icon name="penTool" className="w-5 h-5" />
                       المحتوى المكتوب
                     </button>
                   </div>
@@ -323,7 +346,7 @@
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
                           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-100 scale-50">
                             <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_30px_rgba(168,85,247,0.4)]">
-                              <Play className="w-8 h-8 text-white ml-2" fill="currentColor" />
+                              <Icon name="play" className="w-8 h-8 text-white ml-2 fill-current" />
                             </div>
                           </div>
                           <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -355,7 +378,7 @@
                           <div>
                             <div className="flex justify-between items-start mb-6">
                               <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500 group-hover:bg-blue-500 group-hover:text-white">
-                                <FileText className="w-6 h-6" />
+                                <Icon name="fileText" className="w-6 h-6" />
                               </div>
                               <span className="text-gray-500 text-sm bg-black/30 px-3 py-1 rounded-full">{item.date}</span>
                             </div>
@@ -369,13 +392,13 @@
                           <div className="flex justify-between items-center pt-6 border-t border-white/5">
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center">
-                                <PenTool className="w-4 h-4 text-gray-300" />
+                                <Icon name="penTool" className="w-4 h-4 text-gray-300" />
                               </div>
                               <span className="text-gray-400 text-sm font-semibold">{item.author}</span>
                             </div>
                             <button className="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-bold transition-colors group/btn">
                               اقرأ المزيد
-                              <ChevronLeft className="w-4 h-4 transform group-hover/btn:-translate-x-2 transition-transform" />
+                              <Icon name="chevronLeft" className="w-4 h-4 transform group-hover/btn:-translate-x-2 transition-transform" />
                             </button>
                           </div>
                         </div>
