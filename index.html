@@ -144,7 +144,7 @@
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
       const [showPassword, setShowPassword] = useState(false);
-      const [rememberMe, setRememberMe] = useState(false); // حالة زر تذكرني
+      const [rememberMe, setRememberMe] = useState(false);
       const [loginError, setLoginError] = useState('');
       const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -174,7 +174,6 @@
             (email === 'ieatdmostafa@gmail.com' && password === 'mostafa279941ieatd.com#@0')
           ) {
             setIsAuthenticated(true);
-            // حفظ حالة الدخول إذا تم تحديد "تذكرني"
             if (rememberMe) {
               localStorage.setItem('isMediaProdAuth', 'true');
             }
@@ -192,12 +191,38 @@
         setPassword('');
         setRememberMe(false);
         setActiveTab('visual');
-        // مسح بيانات الدخول المحفوظة
         localStorage.removeItem('isMediaProdAuth');
       };
 
-      // فئات المحتوى المرئي
-      const visualCategories = ['الكل', 'بوست', 'كاروسيل', 'بروفايل', 'ريلز او فيديوهات', 'شروحات لمنصة الأكاديمية', 'شروحات لمنصة انفينيتي'];
+      // فئات المحتوى المرئي (تم إضافة قسم "تصميمات")
+      const visualCategories = ['الكل', 'تصميمات', 'بوست', 'كاروسيل', 'بروفايل', 'ريلز او فيديوهات', 'شروحات لمنصة الأكاديمية', 'شروحات لمنصة انفينيتي'];
+
+      // بيانات المحتوى المرئي (التصميمات المطلوبة)
+      const visualContent = [
+        { 
+          id: 1, 
+          title: 'ديزاين رأي عميل', 
+          category: 'تصميمات', 
+          duration: 'صورة', 
+          // صورة معبرة عن التقييمات وآراء العملاء
+          image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          link: 'https://drive.google.com/file/d/1zauTrBWvibTvTAgcWN0Q6nzcV9ITGS4x/view?usp=sharing'
+        },
+        { 
+          id: 2, 
+          title: 'ديزاين متبقي 10 ايام', 
+          category: 'تصميمات', 
+          duration: 'صورة', 
+          // تم استبدال الصورة بالديزاين المطلوب
+          image: 'https://png.pngtree.com/png-vector/20230417/ourlarge/pngtree-10-days-left-countdown-discounts-vector-png-image_6712192.png',
+          link: 'https://drive.google.com/file/d/1R01DTkG9Z_Giz_EQ2Ihid2yAuPyAjZDi/view?usp=sharing'
+        }
+      ];
+
+      // فلترة المحتوى المرئي
+      const filteredVisualContent = visualFilter === 'الكل' 
+        ? visualContent 
+        : visualContent.filter(item => item.category === visualFilter);
 
       // واجهة رسالة "قيد المعالجة" الموحدة
       const processingUI = (
@@ -359,29 +384,13 @@
                       {/* الأيقونة الـ 3D المصغرة والمتحركة في الهيدر */}
                       <div className="relative w-12 h-12 perspective-1000 ml-1 sm:ml-2">
                         <div className="w-full h-full relative preserve-3d animate-float-3d">
-                          
-                          {/* طبقة التسويق (الخلفية) - مكبر الصوت */}
-                          <div 
-                            className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-cyan-500/30 backdrop-blur-md rounded-xl border border-blue-400/20 flex items-center justify-center shadow-lg"
-                            style={{ transform: 'translateZ(-15px)' }}
-                          >
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-cyan-500/30 backdrop-blur-md rounded-xl border border-blue-400/20 flex items-center justify-center shadow-lg" style={{ transform: 'translateZ(-15px)' }}>
                             <Icon name="megaphone" className="w-5 h-5 text-blue-200 opacity-60 transform -rotate-12" />
                           </div>
-                          
-                          {/* طبقة وسطى زجاجية للعمق */}
-                          <div 
-                            className="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10"
-                            style={{ transform: 'translateZ(0px) scale(0.95)' }}
-                          ></div>
-
-                          {/* طبقة الميديا (الأمامية البارزة) - زر التشغيل */}
-                          <div 
-                            className="absolute inset-0 bg-gradient-to-tr from-purple-600 to-pink-500 rounded-xl border border-white/30 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.5)]"
-                            style={{ transform: 'translateZ(15px)' }}
-                          >
+                          <div className="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10" style={{ transform: 'translateZ(0px) scale(0.95)' }}></div>
+                          <div className="absolute inset-0 bg-gradient-to-tr from-purple-600 to-pink-500 rounded-xl border border-white/30 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.5)]" style={{ transform: 'translateZ(15px)' }}>
                             <Icon name="play" className="w-5 h-5 text-white ml-1 fill-current" />
                           </div>
-                          
                         </div>
                       </div>
 
@@ -523,15 +532,55 @@
                         ))}
                       </div>
 
-                      {/* رسالة قيد المعالجة للمحتوى المرئي */}
-                      {processingUI}
+                      {/* عرض الكروت أو رسالة قيد المعالجة بناءً على الفلتر */}
+                      {filteredVisualContent.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {filteredVisualContent.map((item, index) => (
+                            <div 
+                              key={item.id} 
+                              className="group relative rounded-3xl overflow-hidden glass-panel cursor-pointer aspect-video border border-white/5 hover:border-purple-500/50 transition-all"
+                              style={{ animationDelay: `${index * 100}ms` }}
+                              onClick={() => window.open(item.link, '_blank')}
+                            >
+                              <img 
+                                src={item.image} 
+                                alt={item.title} 
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-40"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent"></div>
+                              
+                              {/* زر فتح الرابط الخارجي (Drive) مع أيقونة التحميل الأنيميشن */}
+                              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-100 scale-50">
+                                <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_30px_rgba(168,85,247,0.4)] group-hover:animate-bounce">
+                                  <Icon name="download" className="w-6 h-6 text-white" />
+                                </div>
+                              </div>
+
+                              <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                <span className="inline-block px-3 py-1 bg-purple-500/30 border border-purple-500/50 text-purple-200 rounded-lg text-xs font-bold mb-2 backdrop-blur-sm">
+                                  {item.category}
+                                </span>
+                                <div className="flex justify-between items-end">
+                                  <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
+                                    {item.title}
+                                  </h3>
+                                  <span className="text-gray-300 text-xs font-mono bg-black/60 px-2 py-1 rounded backdrop-blur-sm">
+                                    {item.duration}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        processingUI
+                      )}
                     </div>
                   )}
 
                   {/* ==================== المحتوى المكتوب ==================== */}
                   {activeTab === 'written' && (
                     <div className="fade-in-up">
-                      {/* رسالة قيد المعالجة للمحتوى المكتوب */}
                       {processingUI}
                     </div>
                   )}
@@ -539,7 +588,6 @@
                   {/* ==================== العروض الفعالة ==================== */}
                   {activeTab === 'offers' && (
                     <div className="fade-in-up">
-                      {/* رسالة قيد المعالجة للعروض الفعالة */}
                       {processingUI}
                     </div>
                   )}
