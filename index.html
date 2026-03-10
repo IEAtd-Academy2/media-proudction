@@ -181,33 +181,24 @@
       // فئات المحتوى المرئي
       const visualCategories = ['الكل', 'بوست', 'كاروسيل', 'بروفايل', 'ريلز او فيديوهات', 'شروحات لمنصة الأكاديمية', 'شروحات لمنصة انفينيتي'];
 
-      // بيانات المحتوى المرئي
-      const visualContent = [
-        { id: 1, title: 'تصميم بوست تفاعلي', category: 'بوست', duration: 'صورة', image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 2, title: 'كاروسيل خطوات النجاح', category: 'كاروسيل', duration: '5 شرائح', image: 'https://images.unsplash.com/photo-1616469829581-73993eb86b02?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 3, title: 'بروفايل الشركة 2024', category: 'بروفايل', duration: 'ملف PDF', image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 4, title: 'كواليس التصوير', category: 'ريلز او فيديوهات', duration: '1:30', image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 5, title: 'كيفية التسجيل وفتح حساب', category: 'شروحات لمنصة الأكاديمية', duration: '3:15', image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 6, title: 'شرح لوحة تحكم التاجر', category: 'شروحات لمنصة انفينيتي', duration: '5:40', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-      ];
-
-      // فلترة المحتوى المرئي
-      const filteredVisualContent = visualFilter === 'الكل' 
-        ? visualContent 
-        : visualContent.filter(item => item.category === visualFilter);
-
-      // بيانات المحتوى المكتوب
-      const writtenContent = [
-        { id: 1, title: 'كيف تبني هوية بصرية قوية لشركتك؟', excerpt: 'في هذا المقال نستعرض أهم الخطوات التي يتبعها فريق الإبداع لدينا لإنشاء هوية بصرية ترسخ في ذهن العميل...', date: '12 أكتوبر 2023', author: 'فريق كتابة المحتوى' },
-        { id: 2, title: 'قوة السرد القصصي في الإعلانات', excerpt: 'القصة هي ما يربط المستهلك بالعلامة التجارية. دعونا نأخذكم في رحلة لكيفية صياغة سيناريو إعلاني يخطف الأنفاس.', date: '05 نوفمبر 2023', author: 'قسم السيناريو' },
-      ];
-
-      // بيانات العروض الفعالة
-      const offersContent = [
-        { id: 1, title: 'باقة الانطلاقة الماسية', discount: 'خصم 30%', description: 'تصميم هوية بصرية كاملة + إدارة حسابات السوشيال ميديا لمدة شهر.', validity: 'صالح حتى نهاية الشهر', color: 'from-pink-500 to-rose-500' },
-        { id: 2, title: 'عرض الفيديو الترويجي', discount: 'مونتاج مجاني', description: 'احصل على مونتاج مجاني عند تصوير فيديو إعلاني للشركة بمدة تتجاوز دقيقتين.', validity: 'عرض محدود', color: 'from-blue-500 to-cyan-500' },
-        { id: 3, title: 'باقة إدارة الحملات', discount: 'استشارة مجانية', description: 'إدارة وتوجيه ميزانية الحملات الإعلانية على جوجل وفيسبوك مع تقرير شامل.', validity: 'لأول 5 عملاء فقط', color: 'from-purple-500 to-indigo-500' },
-      ];
+      // واجهة رسالة "قيد المعالجة" الموحدة
+      const processingUI = (
+        <div className="w-full flex flex-col items-center justify-center py-20 text-center fade-in-up glass-panel rounded-3xl border border-white/5">
+          <div className="w-24 h-24 mb-8 relative flex items-center justify-center">
+            {/* دوائر متحركة للتحميل */}
+            <span className="absolute inline-flex h-full w-full rounded-full bg-purple-500/20 animate-ping"></span>
+            <div className="absolute inset-0 border-t-4 border-b-4 border-purple-500 rounded-full animate-spin"></div>
+            <div className="absolute inset-2 border-l-4 border-r-4 border-blue-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+            <Icon name="loader" className="w-8 h-8 text-white animate-pulse" />
+          </div>
+          <h3 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-l from-purple-400 to-blue-400 mb-4 drop-shadow-md">
+            البيانات الآن قيد المعالجة
+          </h3>
+          <p className="text-gray-400 text-lg max-w-lg mx-auto leading-relaxed">
+            نعمل في الوقت الحالي على تجهيز وتحديث المحتوى الإبداعي الخاص بهذا القسم. يرجى العودة لاحقاً لرؤية أحدث أعمالنا!
+          </p>
+        </div>
+      );
 
       return (
         <div dir="rtl" className="min-h-screen text-white font-sans overflow-x-hidden selection:bg-purple-500 selection:text-white">
@@ -330,22 +321,53 @@
               <header className="fixed top-0 w-full z-50 glass-panel border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                   <div className="flex justify-between items-center h-20">
-                    <div className="flex items-center gap-3 fade-in-up">
-                      <div className="w-10 h-10 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
-                        <Icon name="aperture" className="w-6 h-6 text-white" />
+                    <div className="flex items-center gap-2 sm:gap-4 fade-in-up">
+                      
+                      {/* الأيقونة الـ 3D المصغرة والمتحركة في الهيدر */}
+                      <div className="relative w-12 h-12 perspective-1000 ml-1 sm:ml-2">
+                        <div className="w-full h-full relative preserve-3d animate-float-3d">
+                          
+                          {/* طبقة التسويق (الخلفية) - مكبر الصوت */}
+                          <div 
+                            className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-cyan-500/30 backdrop-blur-md rounded-xl border border-blue-400/20 flex items-center justify-center shadow-lg"
+                            style={{ transform: 'translateZ(-15px)' }}
+                          >
+                            <Icon name="megaphone" className="w-5 h-5 text-blue-200 opacity-60 transform -rotate-12" />
+                          </div>
+                          
+                          {/* طبقة وسطى زجاجية للعمق */}
+                          <div 
+                            className="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10"
+                            style={{ transform: 'translateZ(0px) scale(0.95)' }}
+                          ></div>
+
+                          {/* طبقة الميديا (الأمامية البارزة) - زر التشغيل */}
+                          <div 
+                            className="absolute inset-0 bg-gradient-to-tr from-purple-600 to-pink-500 rounded-xl border border-white/30 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+                            style={{ transform: 'translateZ(15px)' }}
+                          >
+                            <Icon name="play" className="w-5 h-5 text-white ml-1 fill-current" />
+                          </div>
+                          
+                        </div>
                       </div>
-                      <span className="text-xl sm:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-l from-blue-400 via-purple-400 to-pink-400 tracking-tight">
+
+                      <span className="text-lg sm:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-l from-blue-400 via-purple-400 to-pink-400 tracking-tight">
                         قسم التسويق والميديا برودكشن
                       </span>
                     </div>
                     
+                    {/* زر تسجيل الخروج الشيك والتفاعلي */}
                     <button
                       onClick={handleLogout}
-                      className="fade-in-up flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-all duration-300"
+                      className="group fade-in-up flex items-center gap-3 px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-gray-300 hover:text-red-400 transition-all duration-500"
                     >
-                      <span className="text-sm font-semibold hidden sm:block">تسجيل خروج</span>
-                      <Icon name="logOut" className="w-4 h-4" />
+                      <span className="text-sm font-bold hidden sm:block group-hover:-translate-x-1 transition-transform">تسجيل خروج</span>
+                      <div className="w-8 h-8 rounded-lg bg-white/5 group-hover:bg-red-500/20 flex items-center justify-center transition-colors">
+                        <Icon name="logOut" className="w-4 h-4 transform group-hover:scale-110 transition-transform" />
+                      </div>
                     </button>
+
                   </div>
                 </div>
               </header>
@@ -446,7 +468,7 @@
                   </div>
                 </div>
 
-                <div className="relative min-h-[500px]">
+                <div className="relative min-h-[400px]">
                   
                   {/* ==================== المحتوى المرئي ==================== */}
                   {activeTab === 'visual' && (
@@ -468,133 +490,24 @@
                         ))}
                       </div>
 
-                      {/* شبكة الكروت للمحتوى المرئي */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredVisualContent.map((item, index) => (
-                          <div 
-                            key={item.id} 
-                            className="group relative rounded-3xl overflow-hidden glass-panel cursor-pointer aspect-video"
-                            style={{ animationDelay: `${index * 100}ms` }}
-                          >
-                            <img 
-                              src={item.image} 
-                              alt={item.title} 
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-40"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent"></div>
-                            
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-100 scale-50">
-                              <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_30px_rgba(168,85,247,0.4)]">
-                                <Icon name="play" className="w-6 h-6 text-white ml-1 fill-current" />
-                              </div>
-                            </div>
-
-                            <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                              <span className="inline-block px-3 py-1 bg-purple-500/30 border border-purple-500/50 text-purple-200 rounded-lg text-xs font-bold mb-2 backdrop-blur-sm">
-                                {item.category}
-                              </span>
-                              <div className="flex justify-between items-end">
-                                <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
-                                  {item.title}
-                                </h3>
-                                <span className="text-gray-300 text-xs font-mono bg-black/60 px-2 py-1 rounded backdrop-blur-sm">
-                                  {item.duration}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                        {filteredVisualContent.length === 0 && (
-                          <div className="col-span-full text-center py-20 text-gray-500">
-                            لا يوجد محتوى متوفر في هذا القسم حالياً.
-                          </div>
-                        )}
-                      </div>
+                      {/* رسالة قيد المعالجة للمحتوى المرئي */}
+                      {processingUI}
                     </div>
                   )}
 
                   {/* ==================== المحتوى المكتوب ==================== */}
                   {activeTab === 'written' && (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 fade-in-up">
-                      {writtenContent.map((item, index) => (
-                        <div 
-                          key={item.id} 
-                          className="group glass-panel rounded-3xl p-8 hover:bg-white/5 transition-all duration-500 border border-white/5 hover:border-purple-500/30 hover:shadow-[0_0_40px_rgba(168,85,247,0.1)] flex flex-col justify-between"
-                          style={{ animationDelay: `${index * 150}ms` }}
-                        >
-                          <div>
-                            <div className="flex justify-between items-start mb-6">
-                              <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500 group-hover:bg-blue-500 group-hover:text-white">
-                                <Icon name="fileText" className="w-6 h-6" />
-                              </div>
-                              <span className="text-gray-500 text-sm bg-black/30 px-3 py-1 rounded-full">{item.date}</span>
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-l group-hover:from-purple-400 group-hover:to-blue-400 transition-all">
-                              {item.title}
-                            </h3>
-                            <p className="text-gray-400 leading-relaxed mb-8 text-lg">
-                              {item.excerpt}
-                            </p>
-                          </div>
-                          <div className="flex justify-between items-center pt-6 border-t border-white/5">
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center">
-                                <Icon name="penTool" className="w-4 h-4 text-gray-300" />
-                              </div>
-                              <span className="text-gray-400 text-sm font-semibold">{item.author}</span>
-                            </div>
-                            <button className="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-bold transition-colors group/btn">
-                              اقرأ المزيد
-                              <Icon name="chevronLeft" className="w-4 h-4 transform group-hover/btn:-translate-x-2 transition-transform" />
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="fade-in-up">
+                      {/* رسالة قيد المعالجة للمحتوى المكتوب */}
+                      {processingUI}
                     </div>
                   )}
 
                   {/* ==================== العروض الفعالة ==================== */}
                   {activeTab === 'offers' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in-up">
-                      {offersContent.map((offer, index) => (
-                        <div 
-                          key={offer.id}
-                          className="relative overflow-hidden glass-panel rounded-3xl border border-white/10 hover:border-pink-500/30 transition-all duration-500 hover:transform hover:-translate-y-2 group"
-                          style={{ animationDelay: `${index * 150}ms` }}
-                        >
-                          {/* تأثير ضوئي للخلفية */}
-                          <div className={`absolute top-0 right-0 w-full h-2 bg-gradient-to-l ${offer.color}`}></div>
-                          <div className={`absolute -right-20 -top-20 w-40 h-40 bg-gradient-to-bl ${offer.color} rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-500`}></div>
-
-                          <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                              <div className="flex-1">
-                                <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-4 bg-gradient-to-r ${offer.color} text-white shadow-lg`}>
-                                  {offer.discount}
-                                </span>
-                                <h3 className="text-2xl font-black text-white mb-2">{offer.title}</h3>
-                              </div>
-                              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:rotate-12 transition-transform">
-                                <Icon name="tag" className="w-5 h-5 text-gray-300" />
-                              </div>
-                            </div>
-                            
-                            <p className="text-gray-400 leading-relaxed mb-8 border-b border-dashed border-white/10 pb-6">
-                              {offer.description}
-                            </p>
-                            
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm font-medium text-gray-500 bg-black/40 px-3 py-1 rounded-md">
-                                {offer.validity}
-                              </span>
-                              <button className={`text-sm font-bold bg-clip-text text-transparent bg-gradient-to-l ${offer.color} hover:opacity-80 transition-opacity flex items-center gap-1`}>
-                                اطلب الآن
-                                <Icon name="chevronLeft" className="w-4 h-4 text-pink-500" />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="fade-in-up">
+                      {/* رسالة قيد المعالجة للعروض الفعالة */}
+                      {processingUI}
                     </div>
                   )}
 
