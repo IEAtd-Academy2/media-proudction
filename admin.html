@@ -21,11 +21,13 @@
     import { createRoot } from 'https://esm.sh/react-dom@18/client';
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // ⚠️ ضع مفاتيحك هنا (نفس المفاتيح التي ستضعها في index.html)
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL'; 
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    // ==========================================
+    // إعدادات Supabase الخاصة بك
+    // ==========================================
+    const SUPABASE_URL = 'https://ieskeelafgbvgmjdeccs.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'sb_publishable_dptrZNb8r_QsktBuE4bmQw_rCGGGhDX';
     
-    // التحقق من صحة الرابط لتجنب ظهور خطأ (Invalid supabaseUrl)
+    // التحقق من صحة الرابط
     const isSupabaseConfigured = SUPABASE_URL.startsWith('http');
     const supabase = isSupabaseConfigured ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
@@ -85,7 +87,7 @@
             <div className="glass p-8 rounded-2xl w-full max-w-lg text-center space-y-4 border border-red-500/30">
               <h2 className="text-2xl font-bold text-red-400">تنبيه هام</h2>
               <p className="text-gray-300 leading-relaxed">
-                مفاتيح <b>Supabase</b> غير صالحة أو مفقودة. يرجى فتح الكود واستبدال <code>YOUR_SUPABASE_URL</code> و <code>YOUR_SUPABASE_ANON_KEY</code> بالمفاتيح الحقيقية الخاصة بك لكي تعمل لوحة الإدارة.
+                مفاتيح <b>Supabase</b> غير صالحة أو مفقودة. يرجى فتح الكود واستبدال الرابط والمفتاح بالمفاتيح الحقيقية الخاصة بك لكي تعمل لوحة الإدارة.
               </p>
             </div>
           </div>
