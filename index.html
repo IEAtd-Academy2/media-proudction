@@ -144,8 +144,17 @@
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
       const [showPassword, setShowPassword] = useState(false);
+      const [rememberMe, setRememberMe] = useState(false); // حالة زر تذكرني
       const [loginError, setLoginError] = useState('');
       const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+      // التحقق من حالة الدخول المحفوظة عند تحميل الصفحة
+      useEffect(() => {
+        const savedAuth = localStorage.getItem('isMediaProdAuth');
+        if (savedAuth === 'true') {
+          setIsAuthenticated(true);
+        }
+      }, []);
 
       // حالة التنقل والفلاتر
       const [activeTab, setActiveTab] = useState('visual'); // 'visual' | 'written' | 'offers'
@@ -160,9 +169,15 @@
         setTimeout(() => {
           if (
             (email === 'info@ieatd.com' && password === '123') ||
-            (email === 'mohamed.cms737@gmail.com' && password === 'menna123456789##@0')
+            (email === 'mohamed.cms737@gmail.com' && password === 'menna123456789##@0') ||
+            (email === 'ieatdeslam@gmail.com' && password === 'islamieatd.com123') ||
+            (email === 'ieatdmostafa@gmail.com' && password === 'mostafa279941ieatd.com#@0')
           ) {
             setIsAuthenticated(true);
+            // حفظ حالة الدخول إذا تم تحديد "تذكرني"
+            if (rememberMe) {
+              localStorage.setItem('isMediaProdAuth', 'true');
+            }
           } else {
             setLoginError('بيانات الدخول غير صحيحة، يرجى المحاولة مرة أخرى.');
           }
@@ -175,7 +190,10 @@
         setIsAuthenticated(false);
         setEmail('');
         setPassword('');
+        setRememberMe(false);
         setActiveTab('visual');
+        // مسح بيانات الدخول المحفوظة
+        localStorage.removeItem('isMediaProdAuth');
       };
 
       // فئات المحتوى المرئي
@@ -288,6 +306,21 @@
                         {showPassword ? <Icon name="eyeOff" className="h-5 w-5" /> : <Icon name="eye" className="h-5 w-5" />}
                       </button>
                     </div>
+                  </div>
+
+                  {/* خيار تذكرني */}
+                  <div className="flex items-center">
+                    <input
+                      id="remember-me"
+                      name="remember-me"
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-700 bg-gray-900/50 text-purple-500 focus:ring-purple-500 focus:ring-offset-gray-900 cursor-pointer accent-purple-500 transition-all"
+                    />
+                    <label htmlFor="remember-me" className="mr-2 block text-sm text-gray-300 cursor-pointer select-none">
+                      تذكرني للزيارات القادمة
+                    </label>
                   </div>
 
                   {loginError && (
