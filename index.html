@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ميديا برودكشن | المنصة الإبداعية</title>
+  <title>قسم التسويق و الميديا برودكشن | المنصة الإبداعية</title>
   
   <!-- استدعاء Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -94,7 +94,7 @@
   <script type="text/babel" data-type="module">
     import React, { useState, useEffect, useRef } from 'https://esm.sh/react@18';
     import { createRoot } from 'https://esm.sh/react-dom@18/client';
-    // استيراد أيقونات lucide الأساسية بدلاً من مكونات React لتجنب أخطاء التوافق
+    // استيراد أيقونات lucide الأساسية
     import * as icons from 'https://esm.sh/lucide@latest';
 
     // مكون مساعد لرسم الأيقونات بأمان
@@ -103,11 +103,9 @@
 
       useEffect(() => {
         if (iconRef.current && icons.icons[name]) {
-          // تفريغ المحتوى السابق لتجنب تكرار الأيقونة عند التحديث
           iconRef.current.innerHTML = '';
           const iconNode = icons.icons[name].toSvg();
           
-          // تحويل سلسلة SVG النصية إلى عنصر DOM
           const template = document.createElement('template');
           template.innerHTML = iconNode.trim();
           const svgElement = template.content.firstChild;
@@ -133,8 +131,9 @@
       const [loginError, setLoginError] = useState('');
       const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-      // حالة التنقل بين الأقسام
-      const [activeTab, setActiveTab] = useState('visual');
+      // حالة التنقل والفلاتر
+      const [activeTab, setActiveTab] = useState('visual'); // 'visual' | 'written' | 'offers'
+      const [visualFilter, setVisualFilter] = useState('الكل');
 
       // دالة تسجيل الدخول
       const handleLogin = (e) => {
@@ -160,20 +159,35 @@
         setActiveTab('visual');
       };
 
+      // فئات المحتوى المرئي
+      const visualCategories = ['الكل', 'بوست', 'كاروسيل', 'بروفايل', 'ريلز او فيديوهات', 'شروحات لمنصة الأكاديمية', 'شروحات لمنصة انفينيتي'];
+
       // بيانات المحتوى المرئي
       const visualContent = [
-        { id: 1, title: 'إعلان الشركة السنوي', category: 'فيديو ترويجي', duration: '2:45', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 2, title: 'تغطية مؤتمر الرياض', category: 'تغطية فعاليات', duration: '5:12', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 3, title: 'كواليس إطلاق المنتج', category: 'خلف الكواليس', duration: '1:30', image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
-        { id: 4, title: 'مقابلة المدير التنفيذي', category: 'مقابلات شخصية', duration: '10:05', image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+        { id: 1, title: 'تصميم بوست تفاعلي', category: 'بوست', duration: 'صورة', image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+        { id: 2, title: 'كاروسيل خطوات النجاح', category: 'كاروسيل', duration: '5 شرائح', image: 'https://images.unsplash.com/photo-1616469829581-73993eb86b02?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+        { id: 3, title: 'بروفايل الشركة 2024', category: 'بروفايل', duration: 'ملف PDF', image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+        { id: 4, title: 'كواليس التصوير', category: 'ريلز او فيديوهات', duration: '1:30', image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+        { id: 5, title: 'كيفية التسجيل وفتح حساب', category: 'شروحات لمنصة الأكاديمية', duration: '3:15', image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
+        { id: 6, title: 'شرح لوحة تحكم التاجر', category: 'شروحات لمنصة انفينيتي', duration: '5:40', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
       ];
+
+      // فلترة المحتوى المرئي
+      const filteredVisualContent = visualFilter === 'الكل' 
+        ? visualContent 
+        : visualContent.filter(item => item.category === visualFilter);
 
       // بيانات المحتوى المكتوب
       const writtenContent = [
         { id: 1, title: 'كيف تبني هوية بصرية قوية لشركتك؟', excerpt: 'في هذا المقال نستعرض أهم الخطوات التي يتبعها فريق الإبداع لدينا لإنشاء هوية بصرية ترسخ في ذهن العميل...', date: '12 أكتوبر 2023', author: 'فريق كتابة المحتوى' },
         { id: 2, title: 'قوة السرد القصصي في الإعلانات', excerpt: 'القصة هي ما يربط المستهلك بالعلامة التجارية. دعونا نأخذكم في رحلة لكيفية صياغة سيناريو إعلاني يخطف الأنفاس.', date: '05 نوفمبر 2023', author: 'قسم السيناريو' },
-        { id: 3, title: 'دليل استخدام نبرة الصوت للعلامة التجارية', excerpt: 'نبرة الصوت ليست مجرد كلمات، بل هي الشخصية التي تتحدث بها الشركة. اكتشف كيف نحدد نبرة الصوت المناسبة.', date: '22 ديسمبر 2023', author: 'مدير المحتوى' },
-        { id: 4, title: 'تأثير الألوان على سيكولوجية المستهلك', excerpt: 'لماذا نختار الأزرق للثقة والأحمر للحماس؟ تحليل عميق لاختيارات فريق التصميم لدينا في المشاريع الكبرى.', date: '14 يناير 2024', author: 'فريق الأبحاث' },
+      ];
+
+      // بيانات العروض الفعالة
+      const offersContent = [
+        { id: 1, title: 'باقة الانطلاقة الماسية', discount: 'خصم 30%', description: 'تصميم هوية بصرية كاملة + إدارة حسابات السوشيال ميديا لمدة شهر.', validity: 'صالح حتى نهاية الشهر', color: 'from-pink-500 to-rose-500' },
+        { id: 2, title: 'عرض الفيديو الترويجي', discount: 'مونتاج مجاني', description: 'احصل على مونتاج مجاني عند تصوير فيديو إعلاني للشركة بمدة تتجاوز دقيقتين.', validity: 'عرض محدود', color: 'from-blue-500 to-cyan-500' },
+        { id: 3, title: 'باقة إدارة الحملات', discount: 'استشارة مجانية', description: 'إدارة وتوجيه ميزانية الحملات الإعلانية على جوجل وفيسبوك مع تقرير شامل.', validity: 'لأول 5 عملاء فقط', color: 'from-purple-500 to-indigo-500' },
       ];
 
       return (
@@ -189,8 +203,10 @@
                   <div className="w-20 h-20 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-2xl flex items-center justify-center mb-6 floating shadow-lg shadow-purple-500/30">
                     <Icon name="aperture" className="w-10 h-10 text-white" />
                   </div>
-                  <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-2">ميديا برودكشن</h1>
-                  <p className="text-gray-400 text-sm">البوابة الخاصة بفريق الإبداع</p>
+                  <h1 className="text-3xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-l from-blue-400 via-purple-400 to-pink-400 mb-2 drop-shadow-[0_0_15px_rgba(192,132,252,0.3)] tracking-tight text-center">
+                    قسم التسويق <br className="sm:hidden" /> والميديا برودكشن
+                  </h1>
+                  <p className="text-gray-400 text-sm mt-1">البوابة الخاصة بفريق الإبداع</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-6">
@@ -269,11 +285,11 @@
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                   <div className="flex justify-between items-center h-20">
                     <div className="flex items-center gap-3 fade-in-up">
-                      <div className="w-10 h-10 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
                         <Icon name="aperture" className="w-6 h-6 text-white" />
                       </div>
-                      <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-                        ميديا برودكشن
+                      <span className="text-xl sm:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-l from-blue-400 via-purple-400 to-pink-400 tracking-tight">
+                        قسم التسويق والميديا برودكشن
                       </span>
                     </div>
                     
@@ -289,7 +305,7 @@
               </header>
 
               <main className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-                <div className="text-center mb-20 relative z-10">
+                <div className="text-center mb-12 relative z-10">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel mb-6 fade-in-up text-purple-400 text-sm font-semibold">
                     <Icon name="sparkles" className="w-4 h-4" />
                     <span>المنصة الإبداعية المتكاملة</span>
@@ -298,15 +314,59 @@
                     حيث يتحول <span className="bg-clip-text text-transparent bg-gradient-to-l from-purple-400 to-blue-500">الخيال</span> إلى واقع
                   </h1>
                   <p className="mt-4 text-xl text-gray-400 max-w-3xl mx-auto fade-in-up delay-200 leading-relaxed">
-                    نحن فريق ميديا برودكشن، نصنع المحتوى المرئي والمكتوب الذي يبني جسوراً من الثقة والتميز مع جمهورنا. استكشف أحدث أعمالنا الإبداعية.
+                    نحن قسم التسويق و الميديا برودكشن، نصنع المحتوى المرئي والمكتوب الذي يبني جسوراً من الثقة والتميز مع جمهورنا.
                   </p>
                 </div>
 
-                <div className="flex justify-center mb-16 fade-in-up delay-300 relative z-10">
-                  <div className="glass-panel p-2 rounded-2xl flex gap-2">
+                {/* ==================== قسم حالة المنصات ==================== */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16 fade-in-up delay-300 relative z-10 max-w-4xl mx-auto">
+                  {/* منصة الأكاديمية */}
+                  <div className="glass-panel p-5 rounded-2xl border-r-4 border-r-emerald-500 flex items-center justify-between shadow-lg shadow-emerald-500/5 hover:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                        <Icon name="checkCircle" className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-white text-lg">المنصة الخاصة بالأكاديمية</h3>
+                        <p className="text-gray-400 text-sm">النظام الآلي والمحتوى التعليمي</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full">
+                      <div className="relative flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                      </div>
+                      <span className="text-emerald-400 text-sm font-bold">تعمل بكفاءة</span>
+                    </div>
+                  </div>
+
+                  {/* منصة انفينيتي */}
+                  <div className="glass-panel p-5 rounded-2xl border-r-4 border-r-orange-500 flex items-center justify-between shadow-lg shadow-orange-500/5 hover:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400">
+                        <Icon name="alertTriangle" className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-white text-lg">المنصة الخاصة بانفينيتي</h3>
+                        <p className="text-gray-400 text-sm">بوابة التجار والمبيعات</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 px-4 py-2 rounded-full">
+                      <div className="relative flex h-3 w-3">
+                        <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                      </div>
+                      <span className="text-orange-400 text-sm font-bold">متوقفة للتحديثات</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ==================== أزرار التبديل (Tabs) ==================== */}
+                <div className="flex justify-center mb-12 fade-in-up delay-400 relative z-10">
+                  <div className="glass-panel p-2 rounded-2xl flex flex-wrap justify-center gap-2">
                     <button
                       onClick={() => setActiveTab('visual')}
-                      className={`flex items-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-500 ${
+                      className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-500 ${
                         activeTab === 'visual'
                           ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/25'
                           : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -317,7 +377,7 @@
                     </button>
                     <button
                       onClick={() => setActiveTab('written')}
-                      className={`flex items-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-500 ${
+                      className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-500 ${
                         activeTab === 'written'
                           ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/25'
                           : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -326,47 +386,88 @@
                       <Icon name="penTool" className="w-5 h-5" />
                       المحتوى المكتوب
                     </button>
+                    <button
+                      onClick={() => setActiveTab('offers')}
+                      className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-500 ${
+                        activeTab === 'offers'
+                          ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/25'
+                          : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <Icon name="tag" className="w-5 h-5" />
+                      العروض الفعالة
+                    </button>
                   </div>
                 </div>
 
                 <div className="relative min-h-[500px]">
+                  
+                  {/* ==================== المحتوى المرئي ==================== */}
                   {activeTab === 'visual' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 fade-in-up">
-                      {visualContent.map((item, index) => (
-                        <div 
-                          key={item.id} 
-                          className="group relative rounded-3xl overflow-hidden glass-panel cursor-pointer aspect-video"
-                          style={{ animationDelay: `${index * 150}ms` }}
-                        >
-                          <img 
-                            src={item.image} 
-                            alt={item.title} 
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-40"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-100 scale-50">
-                            <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_30px_rgba(168,85,247,0.4)]">
-                              <Icon name="play" className="w-8 h-8 text-white ml-2 fill-current" />
+                    <div className="fade-in-up">
+                      {/* شريط فلاتر المحتوى المرئي */}
+                      <div className="flex flex-wrap justify-center gap-2 mb-10">
+                        {visualCategories.map((category) => (
+                          <button
+                            key={category}
+                            onClick={() => setVisualFilter(category)}
+                            className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
+                              visualFilter === category
+                                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)]'
+                                : 'bg-black/20 text-gray-400 border border-white/5 hover:border-white/10 hover:text-white'
+                            }`}
+                          >
+                            {category}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* شبكة الكروت للمحتوى المرئي */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredVisualContent.map((item, index) => (
+                          <div 
+                            key={item.id} 
+                            className="group relative rounded-3xl overflow-hidden glass-panel cursor-pointer aspect-video"
+                            style={{ animationDelay: `${index * 100}ms` }}
+                          >
+                            <img 
+                              src={item.image} 
+                              alt={item.title} 
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-40"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent"></div>
+                            
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-100 scale-50">
+                              <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_30px_rgba(168,85,247,0.4)]">
+                                <Icon name="play" className="w-6 h-6 text-white ml-1 fill-current" />
+                              </div>
                             </div>
-                          </div>
-                          <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <span className="inline-block px-3 py-1 bg-purple-500/20 border border-purple-500/30 text-purple-300 rounded-lg text-xs font-bold mb-3 backdrop-blur-sm">
-                              {item.category}
-                            </span>
-                            <div className="flex justify-between items-end">
-                              <h3 className="text-2xl font-bold text-white group-hover:text-purple-300 transition-colors">
-                                {item.title}
-                              </h3>
-                              <span className="text-gray-400 text-sm font-mono bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
-                                {item.duration}
+
+                            <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                              <span className="inline-block px-3 py-1 bg-purple-500/30 border border-purple-500/50 text-purple-200 rounded-lg text-xs font-bold mb-2 backdrop-blur-sm">
+                                {item.category}
                               </span>
+                              <div className="flex justify-between items-end">
+                                <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
+                                  {item.title}
+                                </h3>
+                                <span className="text-gray-300 text-xs font-mono bg-black/60 px-2 py-1 rounded backdrop-blur-sm">
+                                  {item.duration}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                        {filteredVisualContent.length === 0 && (
+                          <div className="col-span-full text-center py-20 text-gray-500">
+                            لا يوجد محتوى متوفر في هذا القسم حالياً.
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
 
+                  {/* ==================== المحتوى المكتوب ==================== */}
                   {activeTab === 'written' && (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 fade-in-up">
                       {writtenContent.map((item, index) => (
@@ -405,13 +506,59 @@
                       ))}
                     </div>
                   )}
+
+                  {/* ==================== العروض الفعالة ==================== */}
+                  {activeTab === 'offers' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in-up">
+                      {offersContent.map((offer, index) => (
+                        <div 
+                          key={offer.id}
+                          className="relative overflow-hidden glass-panel rounded-3xl border border-white/10 hover:border-pink-500/30 transition-all duration-500 hover:transform hover:-translate-y-2 group"
+                          style={{ animationDelay: `${index * 150}ms` }}
+                        >
+                          {/* تأثير ضوئي للخلفية */}
+                          <div className={`absolute top-0 right-0 w-full h-2 bg-gradient-to-l ${offer.color}`}></div>
+                          <div className={`absolute -right-20 -top-20 w-40 h-40 bg-gradient-to-bl ${offer.color} rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-500`}></div>
+
+                          <div className="p-8">
+                            <div className="flex justify-between items-start mb-6">
+                              <div className="flex-1">
+                                <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-4 bg-gradient-to-r ${offer.color} text-white shadow-lg`}>
+                                  {offer.discount}
+                                </span>
+                                <h3 className="text-2xl font-black text-white mb-2">{offer.title}</h3>
+                              </div>
+                              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:rotate-12 transition-transform">
+                                <Icon name="tag" className="w-5 h-5 text-gray-300" />
+                              </div>
+                            </div>
+                            
+                            <p className="text-gray-400 leading-relaxed mb-8 border-b border-dashed border-white/10 pb-6">
+                              {offer.description}
+                            </p>
+                            
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium text-gray-500 bg-black/40 px-3 py-1 rounded-md">
+                                {offer.validity}
+                              </span>
+                              <button className={`text-sm font-bold bg-clip-text text-transparent bg-gradient-to-l ${offer.color} hover:opacity-80 transition-opacity flex items-center gap-1`}>
+                                اطلب الآن
+                                <Icon name="chevronLeft" className="w-4 h-4 text-pink-500" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                 </div>
               </main>
               
               <footer className="border-t border-white/5 mt-10 relative z-10 bg-black/20">
                 <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
                   <p className="text-gray-500 text-sm text-center md:text-right">
-                    © {new Date().getFullYear()} قسم ميديا برودكشن. جميع الحقوق محفوظة.
+                    © {new Date().getFullYear()} قسم التسويق و الميديا برودكشن. جميع الحقوق محفوظة.
                   </p>
                   <div className="flex gap-4 text-gray-500">
                     <span className="hover:text-purple-400 cursor-pointer transition-colors">السياسات</span>
